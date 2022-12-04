@@ -1,26 +1,29 @@
 ENEMY_ROCK = "A"
 ENEMY_PAPER = "B"
 ENEMY_SCISSORS = "C"
-PLAYER_ROCK = "X"
-PLAYER_PAPER = "Y"
-PLAYER_SCISSORS = "Z"
+PLAYER_ROCK = 1
+PLAYER_PAPER = 2
+PLAYER_SCISSORS = 3
+LOSE = "X"
+DRAW = "Y"
+WIN = "Z"
 
-SCORE_TABLE = {
-    PLAYER_ROCK: 1,
-    PLAYER_PAPER: 2,
-    PLAYER_SCISSORS: 3
+SCORE_TABLE = { 
+    WIN: 6,
+    DRAW: 3,
+    LOSE: 0
 }
 
-WINNING_TABLE = {
-    (ENEMY_ROCK, PLAYER_ROCK): 3,
-    (ENEMY_ROCK, PLAYER_PAPER): 6,
-    (ENEMY_ROCK, PLAYER_SCISSORS): 0,
-    (ENEMY_PAPER, PLAYER_ROCK): 0,
-    (ENEMY_PAPER, PLAYER_PAPER): 3,
-    (ENEMY_PAPER, PLAYER_SCISSORS): 6,
-    (ENEMY_SCISSORS, PLAYER_ROCK): 6,
-    (ENEMY_SCISSORS, PLAYER_PAPER): 0,
-    (ENEMY_SCISSORS, PLAYER_SCISSORS): 3
+DESIRED_OUTCOME_TABLE = {
+    (ENEMY_ROCK, DRAW): PLAYER_ROCK,
+    (ENEMY_ROCK, WIN): PLAYER_PAPER,
+    (ENEMY_ROCK, LOSE): PLAYER_SCISSORS,
+    (ENEMY_PAPER, LOSE): PLAYER_ROCK,
+    (ENEMY_PAPER, DRAW): PLAYER_PAPER,
+    (ENEMY_PAPER, WIN):PLAYER_SCISSORS,
+    (ENEMY_SCISSORS, WIN): PLAYER_ROCK,
+    (ENEMY_SCISSORS, LOSE): PLAYER_PAPER,
+    (ENEMY_SCISSORS, DRAW): PLAYER_SCISSORS
 }
 
 f = open(r"C:\Code\advent\2022\day2\day2input.txt")
@@ -29,8 +32,8 @@ total = 0
 
 for line in f:
     enemy_choice = line[0]
-    player_choice = line[2]
+    desired_outcome = line[2]
 
-    total += WINNING_TABLE[(enemy_choice, player_choice)] + SCORE_TABLE[player_choice]
+    total += DESIRED_OUTCOME_TABLE[(enemy_choice, desired_outcome)] + SCORE_TABLE[desired_outcome]
 
 print("Done. Total score: " + str(total))
