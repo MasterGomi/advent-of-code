@@ -1,4 +1,4 @@
-f = open(r"2022\day9\day9part2testInput.txt")
+f = open(r"2022\day9\day9input.txt")
 
 def processMovement(head, tail, is_last):
     h_x, h_y = head
@@ -24,9 +24,6 @@ def processMovement(head, tail, is_last):
             t_y -= 1
         elif t_y < h_y:
             t_y += 1
-    
-    if is_last:
-        vistited[(t_x, t_y)] = True
 
     while t_y < h_y - 1:
         t_y += 1
@@ -52,7 +49,7 @@ knots = [(0, 0)] * 10
 vistited = {}
 
 for line in f:
-    vistited[knots[9]] = True
+    vistited[knots[-1]] = True
 
     # Get movement details
     direction = line[0]
@@ -61,24 +58,23 @@ for line in f:
     # Move head
     # The extra adjustment accounts for diagonal movement
     h_x, h_y = knots[0]
-    t_x, t_y = knots[1]
-    if direction == 'U':
-        h_y += distance
-    elif direction == 'D':
-        h_y -= distance
-    elif direction == 'R':
-        h_x += distance
-    elif direction == 'L':
-        h_x -= distance
+    for _ in range(distance):
+        if direction == 'U':
+            h_y += 1
+        elif direction == 'D':
+            h_y -= 1
+        elif direction == 'R':
+            h_x += 1
+        elif direction == 'L':
+            h_x -= 1
         
-    
-    knots[0] = (h_x, h_y)
-    knots[1] = (t_x, t_y)
+        # We're working with tuples, they're immutable so we have to re-assign the list
+        knots[0] = (h_x, h_y)
 
-    for i in range(9):
-        head = knots[i]
-        tail = knots[i + 1]
-        knots[i], knots[i + 1] = processMovement(head, tail, i == 8)
-    vistited[knots[9]] = True
+        for i in range(len(knots) - 1):
+            temp_head = knots[i]
+            temp_tail = knots[i + 1]
+            knots[i], knots[i + 1] = processMovement(temp_head, temp_tail, i == len(knots) - 2)
+        vistited[knots[-1]] = True
 
 print(f"Done. Tail visted {str(len(vistited.keys()))} spaces")
